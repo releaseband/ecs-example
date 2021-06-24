@@ -1,13 +1,23 @@
 import { World, Query, System } from 'ecs';
 import * as PIXI from 'pixi.js';
+import { EventEmitter } from '../EventEmitter';
 import { createMaskedContainer } from '../helpers/PixiHelper';
 
 import { ObjectComponent } from '../components/ObjectComponent';
 import { SymbolComponent } from '../components/SymbolComponent';
+import { SpriteComponent } from '../components/SpriteComponent';
+import { TweenComponent } from '../components/TweenComponent';
+import { BorderTag } from '../components/BorderTag';
 
 import { lerp, easeInOutBack } from '../helpers/Util';
 
-import { Game } from '../Game';
+type Spinner = {
+	components: ObjectComponent[];
+	delay: number;
+	time: number;
+	target: number;
+	position: number;
+};
 
 const SPIN_TIME_MAX = 500;
 const SPIN_DELAY = 20;
@@ -17,19 +27,17 @@ const SPINNER_WIDTH = 134;
 const SYMBOL_HEIGHT = 128;
 
 export class SpinnerSystem implements System {
+	world: World;
 	symbols: Query;
+	borders: Query;
+	tweens: Query;
 	container: PIXI.Container;
-	spinners: {
-		components: ObjectComponent[];
-		delay: number;
-		time: number;
-		target: number;
-		position: number;
-	}[] = [];
+	spinners: Spinner[] = [];
 
 	isSpinning = false;
 
 	constructor(world: World, parentContainer: PIXI.Container) {
+		this.world = world;
 		const width = (PADDING + SPINNER_WIDTH) * COUNT;
 		this.container = createMaskedContainer(130, 110 - 128, width, 360, 128);
 		parentContainer.addChild(this.container);
@@ -45,8 +53,6 @@ export class SpinnerSystem implements System {
 		}
 
 		const onAddCallback = (entity: number) => {
-			console.log('sym added');
-			//const symbolComponent = world.getComponent(entity, SymbolComponent);
 			const objectComponent = world.getComponent(entity, ObjectComponent);
 			for (const [i, spinner] of this.spinners.entries()) {
 				const childrenCount = spinner.components.length;
@@ -60,12 +66,14 @@ export class SpinnerSystem implements System {
 			}
 		};
 
+		this.borders = world.createQuery([BorderTag]);
 		this.symbols = world.createQuery([ObjectComponent, SymbolComponent]);
+		this.tweens = world.createQuery([TweenComponent]);
 		this.symbols.onAddSubscribe(onAddCallback);
 
-		Game.events.on('spin', (symbols: number) => {
-			if (!this.isSpinning && !Game.isTweening) {
-				Game.events.emit('spinner_run');
+		EventEmitter.getInstance().on('spin', (symbols: number) => {
+			if (!this.isSpinning && !this.tweens.entities.size) {
+				this.removeBorders();
 				this.isSpinning = true;
 				for (const [i, spinner] of this.spinners.entries()) {
 					if (spinner.components.length) {
@@ -77,6 +85,33 @@ export class SpinnerSystem implements System {
 				}
 			}
 		});
+	}
+
+	private removeBorders() {
+		for (const entity of this.borders.entities) {
+			this.world.removeEntity(entity);
+		}
+	}
+
+	private setBorders() {
+		for (const entity of this.symbols.entities) {
+			if (this.world.getComponent(entity, ObjectComponent).y === 256) {
+				const border = this.world.createEntity();
+				this.world.addComponent(
+					border,
+					new ObjectComponent({ width: 128, height: 128, parent: entity })
+				);
+				this.world.addComponent(
+					border,
+					new SpriteComponent(PIXI.Texture.from('./assets/ramka.webp'))
+				);
+				this.world.addComponent(border, new BorderTag());
+			}
+		}
+		for (const entity of this.symbols.entities) {
+			const tween = new TweenComponent([{ x: 310, y: 250, duration: 3, yoyo: true, repeat: 1 }]);
+			this.world.addComponent(entity, tween);
+		}
 	}
 
 	public update(dt: number) {
@@ -96,7 +131,7 @@ export class SpinnerSystem implements System {
 				}
 				spinner.delay -= dt;
 			}
-			if (!this.isSpinning) Game.events.emit('spinner_stop');
+			if (!this.isSpinning) this.setBorders();
 		}
 	}
 }

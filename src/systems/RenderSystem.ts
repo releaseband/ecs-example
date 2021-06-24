@@ -11,11 +11,10 @@ export class RenderSystem implements System {
 
 		this.query.onAddSubscribe((entity: number) => {
 			const child = world.getComponent(entity, ObjectComponent);
-			console.log('object added', entity);
+			//console.log('object added', entity);
 			if (child.parent) {
 				const parent = world.getComponent(child.parent, ObjectComponent);
 				if (parent) {
-					console.log('parent present');
 					parent.container.addChild(child.container);
 					parent.children.add(entity);
 				}

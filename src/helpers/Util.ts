@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js';
+
 export const getRandomValue = (min: number, max: number): number =>
 	Math.random() * (max - min) + min;
 
@@ -12,4 +14,11 @@ export const easeInOutBack = (x: number): number => {
 	return x < 0.5
 		? (Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2
 		: (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
+};
+
+export const getRandomTexture = (textures: { [key: string]: PIXI.Texture }): PIXI.Texture => {
+	const symbols = Object.keys(textures);
+	const index = Math.floor(getRandomValue(0, symbols.length));
+	const texture = textures[symbols[index]];
+	return texture;
 };

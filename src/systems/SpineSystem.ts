@@ -12,7 +12,7 @@ export class SpineSystem implements System {
 		this.world = world;
 
 		this.onAddCallback = (entity: number) => {
-			console.log('spine added');
+			//console.log('spine added');
 			const spineComponent = world.getComponent(entity, SpineComponent);
 			const objectComponent = world.getComponent(entity, ObjectComponent);
 			objectComponent.container.addChild(spineComponent.spine);

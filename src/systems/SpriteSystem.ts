@@ -10,14 +10,14 @@ export class SpriteSystem implements System {
 
 	constructor(world: World) {
 		this.onAddCallback = (entity: number) => {
-			console.log('sprite added');
+			//console.log('sprite added');
 			const spriteComponent = world.getComponent(entity, SpriteComponent);
 			const objectComponent = world.getComponent(entity, ObjectComponent);
 			objectComponent.container.addChild(spriteComponent.sprite);
 		};
 
 		this.onRemoveCallback = (entity: number) => {
-			console.log('sprite removed');
+			//console.log('sprite removed');
 			const spriteComponent = world.getComponent(entity, SpriteComponent);
 			const objectComponent = world.getComponent(entity, ObjectComponent);
 			objectComponent.container.removeChild(spriteComponent.sprite);

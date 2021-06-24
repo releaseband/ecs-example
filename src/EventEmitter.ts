@@ -1,5 +1,16 @@
 export class EventEmitter {
-	private events: Map<string, Set<CallableFunction>> = new Map();
+	public static instance: EventEmitter;
+	public static getInstance() {
+		if (!EventEmitter.instance) {
+			EventEmitter.instance = new EventEmitter();
+		}
+		return EventEmitter.instance;
+	}
+	private events: Map<string, Set<CallableFunction>>;
+
+	private constructor() {
+		this.events = new Map();
+	}
 
 	emit(event: string, data?: any): void {
 		const subscribers = this.events.get(event);
