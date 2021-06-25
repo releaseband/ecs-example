@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -11,13 +12,16 @@ module.exports = {
 		filename: 'bundle.js',
 	},
 	plugins: [
+		new webpack.ProvidePlugin({
+			process: 'process/browser',
+		}),
 		new HtmlWebpackPlugin({
 			title: 'template',
 			template: './src/index.html',
 		}),
 		new CopyPlugin({
-		 	patterns: [{ from: './assets/*', to: './' }],
-		 }),
+			patterns: [{ from: './assets/*', to: './' }],
+		}),
 	],
 	devServer: {
 		contentBase: path.join(__dirname, 'dist'),
@@ -26,8 +30,17 @@ module.exports = {
 	},
 	resolve: {
 		extensions: ['.ts', '.js'],
+		fallback: {
+			path: require.resolve('path-browserify'),
+		},
 	},
 	module: {
-		rules: [{ test: /\.tsx?$/, loader: 'ts-loader' }],
+		rules: [
+			{ test: /\.tsx?$/, loader: 'ts-loader' },
+			{
+				test: /\.css$/,
+				use: ['style-loader', 'css-loader'],
+			},
+		],
 	},
 };
