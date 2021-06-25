@@ -36,7 +36,7 @@
 		"webpack-dev-server": "^3.11.2"
 	},
 	"dependencies": {
-		"ecs": "github:releaseband/ecs#master",
+		"@releaseband/ecs": "^0.1.5",
 		"xstate": "^4.20.0"
 	}
 }

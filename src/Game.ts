@@ -1,4 +1,4 @@
-import { World } from 'ecs';
+import { World } from '@releaseband/ecs';
 import * as PIXI from 'pixi.js';
 import { SpineParser } from 'pixi-spine';
 import { getRandomTexture } from './helpers/Util';

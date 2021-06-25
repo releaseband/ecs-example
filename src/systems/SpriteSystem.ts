@@ -1,4 +1,4 @@
-import { World, Query, System } from 'ecs';
+import { World, Query, System } from '@releaseband/ecs';
 import { ObjectComponent } from '../components/ObjectComponent';
 import { SpriteComponent } from '../components/SpriteComponent';
 

@@ -1,4 +1,4 @@
-import { World } from 'ecs';
+import { World } from '@releaseband/ecs';
 
 export default (count: number) => {
 	const world = new World(count);

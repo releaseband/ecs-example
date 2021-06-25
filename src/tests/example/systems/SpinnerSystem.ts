@@ -1,4 +1,4 @@
-import { World, Query, System } from 'ecs';
+import { World, Query, System } from '@releaseband/ecs';
 import * as PIXI from 'pixi.js';
 import { EventEmitter } from '../EventEmitter';
 import { createMaskedContainer } from '../helpers/PixiHelper';
