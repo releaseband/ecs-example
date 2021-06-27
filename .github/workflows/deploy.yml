@@ -13,15 +13,17 @@ jobs:
         with:
           persist-credentials: false 
 
+      - name: Create NPMRC
+        run: |
+            echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+            echo "@releaseband:registry=https://npm.pkg.github.com" >> ~/.npmrc
       - name: Install and Build
         run: |
           npm install
           npm run-script build
-
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
           FOLDER: dist
-
