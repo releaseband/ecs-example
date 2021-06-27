@@ -7,9 +7,11 @@ const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
 	mode: 'development',
 	devtool: 'inline-source-map',
-	entry: './src/index.ts',
+	entry: {
+		bundle: './src/index.ts',
+	},
 	output: {
-		filename: 'bundle.js',
+		filename: '[name].js',
 	},
 	plugins: [
 		new webpack.ProvidePlugin({

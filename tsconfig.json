@@ -1,9 +1,10 @@
 {
 	"compilerOptions": {
 		"strict": true,
-	    "module": "esnext",
-        "declaration": false,
-        "sourceMap": true,
+		"module": "esnext",
+		"lib": ["webworker", "DOM"],
+		"declaration": false,
+		"sourceMap": true,
 		"target": "es6",
 		"esModuleInterop": true,
 		"moduleResolution": "node",
@@ -12,5 +13,5 @@
 		"preserveConstEnums": true,
 		"allowSyntheticDefaultImports": true
 	},
-    "outDir": "./"
+	"outDir": "./"
 }
