@@ -22,7 +22,7 @@ module.exports = {
 			template: './src/index.html',
 		}),
 		new CopyPlugin({
-			patterns: [{ from: './assets/*', to: './' }],
+			patterns: [{ from: './assets/**/*', to: './' }],
 		}),
 	],
 	devServer: {

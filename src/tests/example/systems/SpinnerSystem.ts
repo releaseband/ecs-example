@@ -25,7 +25,6 @@ const COUNT = 5;
 const PADDING = 20;
 const SPINNER_WIDTH = 134;
 const SYMBOL_HEIGHT = 128;
-
 export class SpinnerSystem implements System {
 	world: World;
 	symbols: Query;
@@ -73,6 +72,7 @@ export class SpinnerSystem implements System {
 
 		EventEmitter.getInstance().on('spin', (symbols: number) => {
 			if (!this.isSpinning && !this.tweens.entities.size) {
+				EventEmitter.getInstance().emit('spin-start');
 				this.removeBorders();
 				this.isSpinning = true;
 				for (const [i, spinner] of this.spinners.entries()) {
@@ -94,6 +94,7 @@ export class SpinnerSystem implements System {
 	}
 
 	private setBorders() {
+		EventEmitter.getInstance().emit('spin-stop');
 		for (const entity of this.symbols.entities) {
 			if (this.world.getComponent(entity, ObjectComponent).y === 256) {
 				const border = this.world.createEntity();
