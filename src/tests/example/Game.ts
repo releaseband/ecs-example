@@ -79,24 +79,32 @@ export class Game {
 
 		promises.push(
 			new Promise<void>((resolve, reject) => {
-				const name = '/assets/sounds/coin2.mp3';
+				const name = 'assets/sounds/coin2.mp3';
 				const sound = new Howl({ src: [name] });
 				sound.on('load', () => {
 					this.sounds.set(name, sound);
 					console.warn(`sound ${name} loaded`);
 					resolve();
 				});
+				sound.on('loaderror', (e) => {
+					console.warn(e);
+					reject();
+				});
 				sound.on('loaderror', () => reject());
 			})
 		);
 		promises.push(
 			new Promise<void>((resolve, reject) => {
-				const name = '/assets/sounds/MESSAGE-B_Accept.mp3';
+				const name = 'assets/sounds/MESSAGE-B_Accept.mp3';
 				const sound = new Howl({ src: [name] });
 				sound.on('load', () => {
 					this.sounds.set(name, sound);
 					console.warn(`sound ${name} loaded`);
 					resolve();
+				});
+				sound.on('loaderror', (e) => {
+					console.warn(e);
+					reject();
 				});
 				sound.on('loaderror', () => reject());
 			})
@@ -176,11 +184,11 @@ export class Game {
 			}
 
 			EventEmitter.getInstance().on('spin-start', () => {
-				spawnEntity(this.world, [new SoundComponent(this.getSound('/assets/sounds/coin2.mp3'))]);
+				spawnEntity(this.world, [new SoundComponent(this.getSound('assets/sounds/coin2.mp3'))]);
 			});
 			EventEmitter.getInstance().on('spin-stop', () => {
 				spawnEntity(this.world, [
-					new SoundComponent(this.getSound('/assets/sounds/MESSAGE-B_Accept.mp3')),
+					new SoundComponent(this.getSound('assets/sounds/MESSAGE-B_Accept.mp3')),
 				]);
 			});
 		}
