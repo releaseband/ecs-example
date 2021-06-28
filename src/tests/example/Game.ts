@@ -77,39 +77,19 @@ export class Game {
 	async preload(onLoadCallback: CallableFunction) {
 		const promises: Promise<void>[] = [];
 
-		promises.push(
+		const loadSoundAsync = (path: string) =>
 			new Promise<void>((resolve, reject) => {
-				const name = 'assets/sounds/coin2.mp3';
-				const sound = new Howl({ src: [name] });
+				const sound = new Howl({ src: [path] });
 				sound.on('load', () => {
-					this.sounds.set(name, sound);
-					console.warn(`sound ${name} loaded`);
+					this.sounds.set(path, sound);
+					console.warn(`sound ${path} loaded`);
 					resolve();
 				});
-				sound.on('loaderror', (e) => {
-					console.warn(e);
-					reject();
-				});
 				sound.on('loaderror', () => reject());
-			})
-		);
-		promises.push(
-			new Promise<void>((resolve, reject) => {
-				const name = 'assets/sounds/MESSAGE-B_Accept.mp3';
-				const sound = new Howl({ src: [name] });
-				sound.on('load', () => {
-					this.sounds.set(name, sound);
-					console.warn(`sound ${name} loaded`);
-					resolve();
-				});
-				sound.on('loaderror', (e) => {
-					console.warn(e);
-					reject();
-				});
-				sound.on('loaderror', () => reject());
-			})
-		);
+			});
 
+		promises.push(loadSoundAsync('assets/sounds/coin2.mp3'));
+		promises.push(loadSoundAsync('assets/sounds/MESSAGE-B_Accept.mp3'));
 		promises.push(
 			new Promise<void>((resolve, reject) => {
 				this.app.loader
