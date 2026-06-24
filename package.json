@@ -37,7 +37,7 @@
 	},
 	"dependencies": {
 		"@releaseband/ecs": "^0.1.5",
-		"howler": "^2.2.2",
+		"howler": "^2.2.4",
 		"xstate": "^4.20.0"
 	}
 }
